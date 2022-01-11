@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Post, UseGuards, UsePipes} from '@nestjs/common';
+import {Body, Headers, Controller, Get, Post, UseGuards, UsePipes, Ip} from '@nestjs/common';
 import {CreateUserDto} from "./dto/create-user.dto";
 import {UsersService} from "./users.service";
 import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
@@ -9,6 +9,7 @@ import {RolesGuard} from "../auth/roles.guard";
 import {AddRoleDto} from "./dto/add-role.dto";
 import {BanUserDto} from "./dto/ban-user.dto";
 import {ValidationPipe} from "../pipes/validation.pipe";
+
 
 @ApiTags('Пользователи')
 @Controller('users')
@@ -30,6 +31,12 @@ export class UsersController {
     @Get()
     getAll() {
         return this.usersService.getAllUsers();
+    }
+    @UseGuards(JwtAuthGuard)
+    @Get('/user')
+    getUser(@Headers('Authorization') token: string, @Ip() ip) {
+        console.log(ip, 'op');
+        return this.usersService.getUsers(token);
     }
 
     @ApiOperation({summary: 'Выдать роль'})

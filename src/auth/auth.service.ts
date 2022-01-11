@@ -10,7 +10,9 @@ export class AuthService {
 
     constructor(private userService: UsersService,
                 private jwtService: JwtService) {}
-
+    getRandomInt(max: number): number {
+        return Math.floor(Math.random() * max);
+    }
     async login(userDto: CreateUserDto) {
         const user = await this.validateUser(userDto)
         return this.generateToken(user)
@@ -22,10 +24,14 @@ export class AuthService {
             throw new HttpException('Пользователь с таким email существует', HttpStatus.BAD_REQUEST);
         }
         const hashPassword = await bcrypt.hash(userDto.password, 5);
+
         const user = await this.userService.createUser({...userDto, password: hashPassword})
         return this.generateToken(user)
     }
-
+    async noRegistration() {
+        const user = await this.userService.createUserAnone();
+        return user;
+    }
     private async generateToken(user: User) {
         const payload = {email: user.email, id: user.id, roles: user.roles}
         return {

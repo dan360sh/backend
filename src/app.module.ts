@@ -11,7 +11,11 @@ import { PostsModule } from './posts/posts.module';
 import {Post} from "./posts/posts.model";
 import { FilesModule } from './files/files.module';
 import {ServeStaticModule} from "@nestjs/serve-static";
+import { HistoryModule } from './history/history.module';
 import * as path from 'path';
+import {HistoryСrystal} from "./history/history.model";
+import { BrowserHistoryModule } from './browser-history/browser-history.module';
+import {BrowserHistory} from "./browser-history/browser-history.model";
 
 @Module({
     controllers: [],
@@ -26,11 +30,11 @@ import * as path from 'path';
         SequelizeModule.forRoot({
             dialect: 'postgres',
             host: process.env.POSTGRES_HOST,
-            port: Number(process.env.POSTGRESS_PORT),
+            port: Number(process.env.POSTGRES_PORT),
             username: process.env.POSTGRES_USER,
-            password: process.env.POSTGRESS_PASSWORD,
+            password: process.env.POSTGRES_PASSWORD,
             database: process.env.POSTGRES_DB,
-            models: [User, Role, UserRoles, Post],
+            models: [User, Role, UserRoles, Post, HistoryСrystal, BrowserHistory],
             autoLoadModels: true
         }),
         UsersModule,
@@ -38,6 +42,8 @@ import * as path from 'path';
         AuthModule,
         PostsModule,
         FilesModule,
+        HistoryModule,
+        BrowserHistoryModule,
     ]
 })
 export class AppModule {}
