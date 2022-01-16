@@ -16,7 +16,6 @@ import * as path from 'path';
 import {HistoryСrystal} from "./history/history.model";
 import { BrowserHistoryModule } from './browser-history/browser-history.module';
 import {BrowserHistory} from "./browser-history/browser-history.model";
-import {join} from "path";
 
 @Module({
     controllers: [],
@@ -37,9 +36,6 @@ import {join} from "path";
             database: process.env.POSTGRES_DB,
             models: [User, Role, UserRoles, Post, HistoryСrystal, BrowserHistory],
             autoLoadModels: true
-        }),
-        ServeStaticModule.forRoot({
-            rootPath: join(__dirname, '../..', 'react'),
         }),
         UsersModule,
         RolesModule,

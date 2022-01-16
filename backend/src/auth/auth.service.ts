@@ -4,14 +4,12 @@ import {UsersService} from "../users/users.service";
 import {JwtService} from "@nestjs/jwt";
 import * as bcrypt from 'bcryptjs'
 import {User} from "../users/users.model";
-import {HistoryService} from "../history/history.service";
 
 @Injectable()
 export class AuthService {
 
     constructor(private userService: UsersService,
-                private jwtService: JwtService,
-                private historyService: HistoryService) {}
+                private jwtService: JwtService) {}
     getRandomInt(max: number): number {
         return Math.floor(Math.random() * max);
     }
@@ -28,8 +26,6 @@ export class AuthService {
         const hashPassword = await bcrypt.hash(userDto.password, 5);
 
         const user = await this.userService.createUser({...userDto, password: hashPassword})
-        const history =  await this.historyService.create({plusСrystal: 100, userId: user.id, content: 'За регистрацию аккаунта'});
-        console.log(history);
         return this.generateToken(user)
     }
     async noRegistration() {

@@ -7,12 +7,10 @@ import {AddRoleDto} from "./dto/add-role.dto";
 import {BanUserDto} from "./dto/ban-user.dto";
 import {JwtService} from "@nestjs/jwt";
 import {createTransport} from "nodemailer";
-
-export interface MailModel {
+export interface MailModel{
     code: number;
     email: string;
 }
-
 @Injectable()
 export class UsersService {
 
@@ -27,40 +25,17 @@ export class UsersService {
 
     async createUser(dto: CreateUserDto) {
         let code = this.getRandomInt(9000000000);
-        const user = await this.userRepository.create({
-            ...dto,
-            userCode: code.toString(),
-            userFlag: 1,
-            emailCode: this.getRandomInt(9999)
-        });
+        const user = await this.userRepository.create({...dto, userCode: code.toString(), userFlag: 1, emailCode: this.getRandomInt(9999)});
         const role = await this.roleService.getRoleByValue("ADMIN")
         await user.$set('roles', [role.id])
         user.roles = [role]
         this.sendEmail(user.emailCode, user.email);
         return user;
     }
-
-    async confirmationMail(mailModel: MailModel) {
-        let userUpdate = await this.userRepository.update({userFlag: 2}, {
-            where: {
-                email: mailModel.email,
-                emailCode: mailModel.code
-            }
-        });
-        console.log(userUpdate, 'userUpdate');
-        return userUpdate;
-    }
-
-    async cristalUpdate(userId: number, cristalPlus: number) {
-        console.log('ошибка перед')
-        const cristalCount = await this.userRepository.findOne({where: {id: userId}, include: {all: true}})
-        console.log(cristalCount, 'обновление кристалов');
-        return await this.userRepository.update({cristalCount: cristalPlus}, {
-            where: {
-                id: userId
-            }
-        });
-
+    async confirmationMail(mailModel: MailModel){
+       let userUpdate  = await this.userRepository.update({userFlag: 2}, {where: {email: mailModel.email, emailCode: mailModel.code}});
+       console.log(userUpdate, 'userUpdate');
+       return userUpdate;
     }
 
     async createUserAnone() {
@@ -111,8 +86,7 @@ export class UsersService {
         await user.save();
         return user;
     }
-
-    async sendEmail(code: number, emailTo: string) {
+    async sendEmail(code: number, emailTo: string){
         const transporter = createTransport({
             host: 'smtp.gmail.com',
             port: 587,

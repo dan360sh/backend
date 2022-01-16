@@ -3,15 +3,13 @@ import {ApiTags} from "@nestjs/swagger";
 import {CreateUserDto} from "../users/dto/create-user.dto";
 import {AuthService} from "./auth.service";
 import {MailModel, UsersService} from "../users/users.service";
-import {HistoryService} from "../history/history.service";
 
 @ApiTags('Авторизация')
 @Controller('auth')
 export class AuthController {
 
     constructor(private authService: AuthService,
-                private usersService: UsersService,
-               ) {}
+                private usersService: UsersService) {}
 
     @Post('/login')
     login(@Body() userDto: CreateUserDto) {
@@ -20,12 +18,10 @@ export class AuthController {
 
     @Post('/registration')
     registration(@Body() userDto: CreateUserDto) {
-        console.log('запрос на reg')
         return this.authService.registration(userDto)
     }
     @Post('/noregistration')
     noRegistration() {
-        console.log('запрос на no reg')
         return this.authService.noRegistration()
     }
 

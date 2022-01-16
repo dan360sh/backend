@@ -12,10 +12,6 @@ interface UserCreationAttrs {
     emailCode?: number;
 }
 
-function getRandomInt(max: number): number {
-    return Math.floor(Math.random() * max);
-}
-
 @Table({tableName: 'users_test'})
 export class User extends Model<User, UserCreationAttrs> {
     @ApiProperty({example: '1', description: 'Уникальный идентификатор'})
@@ -36,12 +32,6 @@ export class User extends Model<User, UserCreationAttrs> {
 
     @Column({type: DataType.INTEGER, defaultValue: 0})
     userFlag: number;
-
-    @Column({type: DataType.INTEGER, defaultValue: 0})
-    cristalCount: number;
-
-    @Column({type: DataType.INTEGER, defaultValue: getRandomInt(9999)})
-    promoCod: number;
 
     @ApiProperty({example: 'true', description: 'Забанен или нет'})
     @Column({type: DataType.BOOLEAN, defaultValue: false})
